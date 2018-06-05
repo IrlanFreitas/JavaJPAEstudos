@@ -1,0 +1,62 @@
+Enfatizando que a tarefa do desenvolvedor ao trabalhar com JPA é transformar o status das entidades em Managed, 
+para conseguir utilizar a sincronização, já conhecemos o método persist(), capaz de transformar uma entidade 
+Transient em Managed, e agora aprendemos sobre o método merge(), para uma entidade que já foi Managed, 
+é Detached, e é transformada em Managed de novo.
+
+Estados dos objetos do JPA:
+
+
+Managed - É quando o objeto depois de ser obtido na pesquisa, pelo metodo find() até o momento foi o único visto, qualquer
+alteração é refletida diretamente no registro do banco, sem utilizar o merge(), depois do getTransaction().commit().
+
+A característica do estado Managed é a sincronização automática.
+
+É importante frisar que o estado Managed da entidade dura enquanto o EntityManager estiver aberto.
+
+Transient -
+
+
+Detached - 
+
+
+Removed - 
+
+A mensagem indica que a conta está desatachada (Detached) e, sendo assim, não pode ser removida. 
+Para remover qualquer entidade, ela precisa estar gerenciada (Managed). Então vamos carregar a conta antes com o método 
+find() deletando-a em seguida.
+
+em.getTransaction().begin();
+
+conta = em.find(Conta.class, 1);
+
+em.remove(conta);
+Após a chamada de remove(), o objeto não tem mais representação no banco, já que foi removido. Porém, 
+ele continua existindo na memória, em um estado conhecido como Removed.
+
+
+
+Query
+
+Essa query me deixou curioso:
+
+		String jpqlMove = " SELECT avg(m.valor), m.data from Movimentacao m "
+				+ "WHERE m.conta = :pConta " 
+				+ " AND m.tipo = :pTipo "
+				+ " GROUP BY m.data ";
+				
+Na parte do select tem dois campos de retorno e os valores retornam porem, como object
+e não consegui referencia-los.
+
+
+TypedQuery - Query JPA fortemente típadas. 
+
+
+
+Diferença entre find() e getReference().
+O método find() e o getReference() da interface EntityManager permitem que recuperemos uma instância pela id. 
+Após isso eles a retornam como Managed. A diferença entre find() e getReference() é que o getReference() é Lazy.
+
+
+Entendendo o EntityManager
+
+link: https://www.devmedia.com.br/introducao-ao-entitymanager/5206
